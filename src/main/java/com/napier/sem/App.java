@@ -28,6 +28,8 @@ public class App
         //Display Results
         a.printSalaries(employees);
 
+
+
         // Disconnect from database
         a.disconnect();
     }
@@ -140,7 +142,7 @@ public class App
                             + emp.last_name + "\n"
                             + emp.title + "\n"
                             + "Salary:" + emp.salary + "\n"
-                            + emp.dept_name + "\n"
+                            + emp.dept + "\n"
                             + "Manager: " + emp.manager + "\n");
         }
     }
@@ -203,6 +205,18 @@ public class App
             String emp_string = String.format("%-10s %-15s %-20s %-8s", emp.emp_no, emp.first_name, emp.last_name, emp.salary);
             System.out.println(emp_string);
         }
+    }
+
+    public Department getDepartment(String dept_name)
+    {
+
+        return null;
+    }
+
+    public ArrayList<Employee> getSalariesByDepartment(Department dept)
+    {
+
+        return null;
     }
 
 }

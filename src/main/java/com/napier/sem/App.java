@@ -26,6 +26,12 @@ public class App {
         //Display Results
         a.printSalaries(employees);
 
+        // Extract employee salary information
+        ArrayList<Employee> employees1 = a.getSalariesByRole("Engineer");
+
+        //Display Results
+        a.printSalariesByRole(employees1);
+
         // Get Department
         Department dep = a.getDepartment("Sales");
 
@@ -93,16 +99,20 @@ public class App {
     }
 
     public Employee getEmployee(int ID) {
+
         try {
             // Create an SQL statement
             Statement stmt = con.createStatement();
+
             // Create string for SQL statement
             String strSelect =
                     "SELECT emp_no, first_name, last_name "
                             + "FROM employees "
                             + "WHERE emp_no = " + ID;
+
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
+
             // Return new employee if valid.
             // Check one is returned
             if (rset.next()) {
@@ -195,6 +205,84 @@ public class App {
         }
     }
 
+
+
+
+
+    /**
+     * Gets all the current employees and salaries.
+     *
+     * @return A list of all employees and salaries, or null if there is an error.
+     */
+    public ArrayList<Employee> getSalariesByRole(String title) {
+        try {
+            // Create an SQL statement
+            Statement stmt = con.createStatement();
+            // Create string for SQL statement
+            String strSelect =
+                    "SELECT employees.emp_no, employees.first_name, employees.last_name, salaries.salary "
+                            + "FROM employees, salaries, titles "
+                            + "WHERE employees.emp_no = salaries.emp_no "
+                            + "AND employees.emp_no = titles.emp_no "
+                            + "AND salaries.to_date = '9999-01-01'"
+                            + "AND titles.to_date = '9999-01-01' "
+                            + "AND titles.title = '" + title + "' "
+                            + " ORDER BY employees.emp_no ASC Limit 10";
+            // Execute SQL statement
+            ResultSet rset = stmt.executeQuery(strSelect);
+            // Extract employee information
+            ArrayList<Employee> employees1 = new ArrayList<Employee>();
+            while (rset.next()) {
+                Employee emp = new Employee();
+                emp.emp_no = rset.getInt("employees.emp_no");
+                emp.first_name = rset.getString("employees.first_name");
+                emp.last_name = rset.getString("employees.last_name");
+                emp.salary = rset.getInt("salaries.salary");
+                employees1.add(emp);
+            }
+            return employees1;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get salary details");
+            return null;
+        }
+    }
+
+    /**
+     * Prints a list of employees.
+     *
+     * @param employees1 The list of employees to print.
+     */
+    public void printSalariesByRole(ArrayList<Employee> employees1) {
+
+        // Check employees is not null
+        if (employees1 == null)
+        {
+            System.out.println("No employees");
+            return;
+        }
+
+
+        // Print header
+        System.out.println(String.format("%-10s %-15s %-20s %-8s", "Emp No", "First Name", "Last Name", "Salary"));
+        // Loop over all employees in the list
+        for (Employee emp : employees1) {
+
+            if (emp == null)
+                continue;
+
+            String emp_string =
+                    String.format("%-10s %-15s %-20s %-8s",
+                            emp.emp_no, emp.first_name, emp.last_name, emp.salary);
+            System.out.println(emp_string);
+        }
+    }
+
+
+
+
+
+
     public Department getDepartment(String dept_name) {
         try {
             // Create an SQL statement
@@ -226,6 +314,8 @@ public class App {
 
         }
     }
+
+
 
     public ArrayList<Employee> getSalariesByDepartment(Department dept) {
         try {
@@ -267,10 +357,23 @@ public class App {
      * @param employees2 The list of employees to print.
      */
     public void printSalariesByDepartment(ArrayList<Employee> employees2) {
+
+        // Check departments is not null
+        if (employees2 == null)
+        {
+            System.out.println("No departments");
+            return;
+        }
+
         // Print header
         System.out.println(String.format("%-10s %-15s %-20s %8s", "Emp No", "First Name", "Last Name", "Salary"));
         // Loop over all employees in the list
         for (Employee emp : employees2) {
+
+            if (emp == null)
+                continue;
+
+
             String emp_string =
                     String.format("%-10s %-15s %-20s %8s",
                             emp.emp_no, emp.first_name, emp.last_name, emp.salary);

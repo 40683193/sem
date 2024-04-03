@@ -10,3 +10,6 @@ __Updating README.md file.__
 
 # Software Engineering Methods
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/40683193/sem/main.yml?branch=develop)
+
+
+[![codecov](https://codecov.io/gh/40683193/sem/graph/badge.svg?token=QDG5ASFMPV)](https://codecov.io/gh/40683193/sem)
